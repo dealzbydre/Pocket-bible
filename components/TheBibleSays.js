@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
 const VERSIONS = [
   { id: "KJV", label: "King James Version" },
@@ -79,6 +80,18 @@ export default function TheBibleSays() {
         }}>
           The Bible Says
         </h1>
+        {/* Nav link */}
+        <div style={{ marginTop: 10 }}>
+          <Link href="/video-to-text" style={{
+            fontSize: 12, color: "#4a4540", textDecoration: "none",
+            border: "1px solid rgba(212,175,55,0.15)", borderRadius: 100,
+            padding: "4px 14px", letterSpacing: 0.5,
+            transition: "color 0.2s",
+          }}>
+            ▶ Video to Text
+          </Link>
+        </div>
+
         {/* Version tabs */}
         <div style={{ display: "flex", gap: 6, justifyContent: "center", marginTop: 16, flexWrap: "wrap" }}>
           {VERSIONS.map((v) => (
