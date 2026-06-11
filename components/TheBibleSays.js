@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
 const VERSIONS = [
   { id: "KJV", label: "King James Version" },
@@ -95,6 +96,28 @@ export default function TheBibleSays() {
               {v.id}
             </button>
           ))}
+        </div>
+        {/* Tool nav */}
+        <div style={{ display: "flex", gap: 6, justifyContent: "center", marginTop: 12, flexWrap: "wrap" }}>
+          <span style={{
+            padding: "5px 14px", borderRadius: 100,
+            border: "1.5px solid #d4af37",
+            background: "rgba(212,175,55,0.15)",
+            color: "#d4af37",
+            fontSize: 12, fontWeight: 700, letterSpacing: 0.5,
+          }}>
+            Bible Search
+          </span>
+          <Link href="/image-extractor" style={{
+            padding: "5px 14px", borderRadius: 100,
+            border: "1.5px solid rgba(212,175,55,0.2)",
+            background: "transparent",
+            color: "#7a7060",
+            fontSize: 12, fontWeight: 400, letterSpacing: 0.5,
+            textDecoration: "none", display: "inline-block",
+          }}>
+            Image Extractor
+          </Link>
         </div>
       </div>
 
