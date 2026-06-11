@@ -20,8 +20,7 @@ If no Bible references are found, return an empty array for bibleReferences.`;
 
 function detectPlatform(url) {
   try {
-    const u = new URL(url);
-    const host = u.hostname.replace("www.", "");
+    const host = new URL(url).hostname.replace("www.", "");
     if (host === "youtube.com" || host === "youtu.be" || host === "m.youtube.com") return "youtube";
     if (host === "tiktok.com") return "tiktok";
     if (host === "instagram.com") return "instagram";
@@ -46,16 +45,13 @@ function extractYouTubeId(url) {
   return null;
 }
 
-async function fetchYouTubeTranscript(url) {
-  const videoId = extractYouTubeId(url);
-  if (!videoId) throw new Error("Could not extract YouTube video ID from URL.");
-
-  const items = await YoutubeTranscript.fetchTranscript(videoId);
-  if (!items || items.length === 0) throw new Error("No transcript found. The video may not have captions enabled.");
-
-  const rawText = items.map((i) => i.text.trim()).join(" ");
-  return { rawText, segments: items, videoId };
-}
+const PLATFORM_NAMES = {
+  tiktok: "TikTok",
+  instagram: "Instagram",
+  twitter: "X / Twitter",
+  facebook: "Facebook",
+  twitch: "Twitch",
+};
 
 async function analyzeWithClaude(rawText, apiKey) {
   const response = await fetch("https://api.anthropic.com/v1/messages", {
@@ -83,41 +79,38 @@ async function analyzeWithClaude(rawText, apiKey) {
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { url, pastedText } = req.body;
-  if (!url && !pastedText) return res.status(400).json({ error: "Provide a URL or pasted transcript text." });
+  const { url } = req.body;
+  if (!url) return res.status(400).json({ error: "A social media video URL is required." });
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: "API key not configured" });
+  if (!apiKey) return res.status(500).json({ error: "API key not configured." });
+
+  const platform = detectPlatform(url);
+
+  if (platform !== "youtube") {
+    const name = PLATFORM_NAMES[platform] || "this platform";
+    return res.status(422).json({
+      error: "unsupported_platform",
+      platform,
+      message:
+        platform === "unknown"
+          ? "That doesn't look like a recognized social media URL. Try a YouTube, TikTok, Instagram, X, or Facebook video link."
+          : `Automatic transcript extraction for ${name} is coming soon. YouTube links with captions are fully supported right now.`,
+    });
+  }
 
   try {
-    let rawText = "";
-    let platform = "paste";
-    let videoId = null;
-
-    if (pastedText) {
-      rawText = pastedText;
-      platform = "paste";
-    } else {
-      platform = detectPlatform(url);
-
-      if (platform === "youtube") {
-        const result = await fetchYouTubeTranscript(url);
-        rawText = result.rawText;
-        videoId = result.videoId;
-      } else {
-        return res.status(422).json({
-          error: "unsupported_platform",
-          platform,
-          message:
-            platform === "unknown"
-              ? "Could not recognize this URL. Try YouTube, or paste the transcript text directly."
-              : `Automatic transcript extraction for ${platform} isn't supported yet. Please copy the captions/subtitles and paste them in the text box below.`,
-        });
-      }
+    const videoId = extractYouTubeId(url);
+    if (!videoId) {
+      return res.status(422).json({ error: "Could not find a valid YouTube video ID in that link. Make sure the URL points to a specific video." });
     }
 
-    if (!rawText.trim()) return res.status(400).json({ error: "No transcript text found." });
+    const items = await YoutubeTranscript.fetchTranscript(videoId);
+    if (!items || items.length === 0) {
+      return res.status(422).json({ error: "No captions found for this video. The creator may not have captions enabled." });
+    }
 
+    const rawText = items.map((i) => i.text.trim()).join(" ");
     const analysis = await analyzeWithClaude(rawText, apiKey);
 
     return res.status(200).json({
@@ -128,9 +121,10 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     console.error(err);
-    if (err.message?.includes("Could not extract") || err.message?.includes("No transcript")) {
-      return res.status(422).json({ error: err.message });
+    const msg = err.message || "";
+    if (msg.includes("Could not find") || msg.includes("captions")) {
+      return res.status(422).json({ error: msg });
     }
-    return res.status(500).json({ error: err.message || "Transcription failed." });
+    return res.status(500).json({ error: "Transcription failed. Please try a different video." });
   }
 }
