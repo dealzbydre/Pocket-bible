@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 
 const VERSIONS = [
   { id: "KJV", label: "King James Version" },
@@ -95,6 +96,11 @@ export default function TheBibleSays() {
               {v.id}
             </button>
           ))}
+        </div>
+        <div style={{ marginTop: 12 }}>
+          <Link href="/transcribe" style={{ color: "#7a7060", fontSize: 13, textDecoration: "underline" }}>
+            🎬 Video Transcriber
+          </Link>
         </div>
       </div>
 
