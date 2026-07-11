@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const TONES = ["Punchy", "Educational", "Contrarian", "Storytelling", "Funny", "Inspirational", "Pastor Bryant", "Pastor Hannah"];
+const TONES = ["Punchy", "Educational", "Contrarian", "Storytelling", "Funny", "Inspirational", "Pastor Bryant", "Pastor Hannah", "My Voice"];
 const QUEUE_SLOTS = [9, 13, 18]; // preferred posting hours (local time)
 const ACCENT = "#1d9bf0";
 

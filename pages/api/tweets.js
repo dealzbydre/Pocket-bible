@@ -8,17 +8,34 @@ WRITING RULES:
 6. Never fabricate statistics, quotes, or personal claims about real people.
 7. Return ONLY valid JSON — no markdown, no backticks, no extra text.`;
 
+// Voice guides built from the language patterns of each preaching style.
+// These are style influences for the user's own tweets — never attribute
+// quotes to any real person, and remix the themes into fresh lines rather
+// than copying signature phrases verbatim.
 const TONE_GUIDES = {
-  "Pastor Bryant": `Voice guide — write like a bold, prophetic preacher (do NOT quote or impersonate any real person, just this voice):
-- Short declarative sentences with a preaching cadence and repetition
-- Direct address to the reader: "Hear me", "Don't miss this", "Somebody needs this today"
-- Scripture-anchored themes (faith, purpose, breakthrough, obedience) — cite a verse reference only when confident it fits
-- Kingdom-minded, fiery, confident, but always landing on hope and a call to action`,
-  "Pastor Hannah": `Voice guide — write like a warm, nurturing shepherd (do NOT quote or impersonate any real person, just this voice):
-- Gentle, compassionate encouragement aimed at the weary and overlooked
-- Grace-centered, testimony-style reflection, soft questions
-- Reassuring phrases: "God sees you", "you're not forgotten", "breathe, then begin again"
-- Tender but faith-filled — comfort first, then a small step of hope`,
+  "Pastor Bryant": `Voice guide — prophetic confrontation with cultural relevance. Movement, activism, momentum.
+DNA themes to remix (never quote verbatim, write fresh lines in this spirit):
+- Survival as qualification: you survived what was supposed to kill you; what you survived qualifies you
+- Favor and warfare: favor makes people uncomfortable; the oil attracts warfare; the attack proves the assignment; if you're winning, you'll be tested
+- Reversal: God makes enemies finance your future; the people who overlooked you will have to acknowledge you; God uses what embarrassed you
+- Planted not buried; delay is not denial; your next season requires a different version of you
+- Agency: you don't need permission to walk in purpose; you don't need another confirmation — you need another step; faith without movement is just inspiration
+Sentence formulas: "The reason some of y'all…", "Can I push this a little further?", "Here's what the enemy didn't count on…", "I came to tell somebody…", "The devil made one mistake…"
+Style: bold declarations, fast-paced momentum, current-events and everyday-culture hooks, memorable title-like openers, direct second-person address, always end on a charge to move.`,
+  "Pastor Hannah": `Voice guide — prophetic healing through intimacy with God. Maturity, consecration, presence.
+DNA themes to remix (never quote verbatim, write fresh lines in this spirit):
+- Brokenness and glory: God is not intimidated by your brokenness; broken things still carry glory; the crushing produced the oil; God doesn't waste pain
+- Prayer and the secret place: prayer is where your future is conceived; your secret place determines your public strength; prayer changes the person before it changes the problem; your tears are talking to heaven
+- Process and formation: you cannot skip process and expect promise; some suffering is preparation; before God changes your situation, He changes you; stop asking God to remove what He sent to mature you
+- Identity and heart: your identity is not your history; God is after your heart before your hand; what God wants FROM you is greater than what He wants FOR you; grace gives you another chance to become
+Sentence formulas: "In essence…", "Can I help somebody?", "Hear me by the Holy Ghost…", "If I can get this in your spirit…", "The issue is not…", "God is not trying to…"
+Style: deep emotional truth, metaphoric storytelling, presence-centered, slower and weightier than hype — prophetic comfort first, then internal transformation.`,
+  "My Voice": `Voice guide — a blend: Bryant's relevance with Hannah's intimacy. Depth over cadence.
+- Open with a memorable, title-like frame that connects to everyday life (Bryant's gift)
+- Then go inward: spiritual formation, process, the secret place, what God is forming in the person (Hannah's depth)
+- Prophetic exhortation, not hype: challenge the reader, but land on maturity and presence rather than momentum alone
+- Themes: process before promise, formation over performance, God developing the person the next season requires, prayer as the engine of public strength
+- Plain, warm, direct language a real person would text a friend — memorable but never gimmicky.`,
 };
 
 const toneLine = (tone) => {
