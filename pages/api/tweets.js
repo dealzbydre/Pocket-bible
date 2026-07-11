@@ -8,17 +8,35 @@ WRITING RULES:
 6. Never fabricate statistics, quotes, or personal claims about real people.
 7. Return ONLY valid JSON — no markdown, no backticks, no extra text.`;
 
+const TONE_GUIDES = {
+  "Pastor Bryant": `Voice guide — write like a bold, prophetic preacher (do NOT quote or impersonate any real person, just this voice):
+- Short declarative sentences with a preaching cadence and repetition
+- Direct address to the reader: "Hear me", "Don't miss this", "Somebody needs this today"
+- Scripture-anchored themes (faith, purpose, breakthrough, obedience) — cite a verse reference only when confident it fits
+- Kingdom-minded, fiery, confident, but always landing on hope and a call to action`,
+  "Pastor Hannah": `Voice guide — write like a warm, nurturing shepherd (do NOT quote or impersonate any real person, just this voice):
+- Gentle, compassionate encouragement aimed at the weary and overlooked
+- Grace-centered, testimony-style reflection, soft questions
+- Reassuring phrases: "God sees you", "you're not forgotten", "breathe, then begin again"
+- Tender but faith-filled — comfort first, then a small step of hope`,
+};
+
+const toneLine = (tone) => {
+  const guide = TONE_GUIDES[tone];
+  return guide ? `Tone: ${tone}.\n${guide}` : `Tone: ${tone || "Punchy"}.`;
+};
+
 const MODES = {
   generate: ({ topic, tone }) => ({
     prompt: `Write 4 distinct single tweets about: "${topic}"
-Tone: ${tone || "Punchy"}.
+${toneLine(tone)}
 Each tweet should take a different angle (e.g. bold claim, question, mini-story, practical tip).
 JSON format: {"tweets":[{"text":"tweet text here","style":"short label for the angle"}]}`,
     maxTokens: 1500,
   }),
   thread: ({ topic, tone }) => ({
     prompt: `Write a Twitter/X thread of 6 to 8 tweets about: "${topic}"
-Tone: ${tone || "Educational"}.
+${toneLine(tone || "Educational")}
 Tweet 1 must be a scroll-stopping hook. The last tweet wraps up with a takeaway or soft call to action. Number nothing — just the tweet texts.
 JSON format: {"thread":["tweet 1 text","tweet 2 text"]}`,
     maxTokens: 2000,
