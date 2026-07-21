@@ -51,6 +51,23 @@ must be installed on whatever machine runs the app:
 If they aren't on your `PATH`, point to them with `YTDLP_PATH` / `FFMPEG_PATH`
 in `.env.local`. YouTube-caption transcription works without either tool.
 
+## Run with Docker (recommended — everything bundled)
+
+The included `Dockerfile` bakes in `yt-dlp` and `ffmpeg`, so the speech-to-text
+path works with no extra setup. You only supply the API keys.
+
+```bash
+# 1. put your keys in .env.local (see .env.example)
+cp .env.example .env.local
+
+# 2. build and run
+docker build -t pocket-bible .
+docker run -p 3000:3000 --env-file .env.local pocket-bible
+```
+
+Then open http://localhost:3000. This works on any machine or server with
+Docker and normal internet access.
+
 ## Hosting notes
 
 - **Your own server, a VM, or Docker** — recommended. `yt-dlp` and `ffmpeg` run
